@@ -44,5 +44,5 @@ Route::prefix('user')->group(function () {
     Route::get('time', function(){
         return date('Y-m-d H:i:s', time());
     });
-    Route::post('getData', [App\Http\Controllers\UserController::class, 'getLaporan'])->name('getLaporn');
+    Route::get('getData', [App\Http\Controllers\UserController::class, 'dataLaporan'])->name('getLaporn');
 });
