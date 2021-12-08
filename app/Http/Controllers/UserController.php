@@ -129,16 +129,52 @@ class UserController extends Controller
         return view('user.laporan', compact('trans'));
     }
 
-    public function dataLaporan($x, $y)
+    public function dataLaporan(Request $request)
     {
         $data =  DB::table('transactions')
         ->select('transactions.status','ext','order_number','name','weight','price','payment_type','transactions.created_at')
         ->leftJoin('costumers','costumers.id','=','transactions.costumer_id')
-        ->whereMonth('transactions.created_at','>=', $x)
-        ->whereMonth('transactions.created_at','<=', $y)
+        ->whereDate('transactions.created_at','>=', $request->x)
+        ->whereDate('transactions.created_at','<=', $request->y)
         ->get();
-        
-        dd($data);
-        return $data;
+        $i = 1;
+        $data = array_map(function($x) use ($i) {
+            $json = json_decode($x->ext);
+            $layanan = DB::table('service')->where('id', $json->service_id)->first();
+            $x->no = $i++;
+            $x->no_order = $layanan->code.'-'.$x->order_number;
+            $x->layanan = $layanan->name;
+            $x->pembayaran = ($x->payment_type == 1)?'Lunas':'Belum Lunas';
+            $x->total = number_format($x->price,0,',','.');
+            $x->status = $this->status($x->status);
+            unset($x->ext);
+            unset($x->order_number);
+            unset($x->price);
+            return $x;
+        },$data->toArray());
+
+        return response()->json($data);
+    }
+
+    function status($val)
+    {
+        switch ($val) {
+            case '1':
+                $status = 'Cuci';
+                break;
+            case '2':
+                $status = 'Setrika';
+                break;
+            case '3':
+                $status = 'Selesai';
+                break;
+            case '4':
+                $status = 'Diambil';
+                break;
+            default:
+                $status = 'Proses';
+                break;
+        }
+        return $status;
     }
 }
