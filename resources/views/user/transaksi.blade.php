@@ -262,7 +262,7 @@
                             <td>
                                 <span class="badge bg-info {{($tr->status == 4)?'d-none':''}}"><a href="{{route('proses',[$tr->order_number]) }}" class="text-light">Proses</a></span>
                                 <span class="badge bg-danger {{($tr->payment_type == 1)?'d-none':''}}"><a href="javascript:;" class="text-light">Bayar</a></span>
-                                <span class="badge bg-warning"><a href="" target="_blank" class="text-light">Print</a></span>
+                                <span class="badge bg-warning"><a href="{{ route('print',[$tr->order_number]) }}" target="_blank" class="text-light">Print</a></span>
                             </td>
                         </tr>
                         @endforeach

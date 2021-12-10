@@ -6,7 +6,7 @@
                 <a href="{{ url('user/suplier') }}" class="mx-2 nav-item">Suplier</a>
                 <a href="{{ url('user/service') }}" class="mx-2 nav-item">Service</a>
                 <a href="{{ url('user/stok') }}" class="mx-2 nav-item">Stok</a>
-                <a href="" class="mx-2 nav-item">Kemitraan</a>
+                <a href="{{ url('user/mitra') }}" class="mx-2 nav-item">Cabang</a>
                 <a href="{{ url('user/transaction') }}" class="mx-2 nav-item">Transaksi</a>
                 <a href="{{ url('user/laporan') }}" class="mx-2 nav-item">Laporan</a>
             </div>
@@ -20,7 +20,7 @@
                   <li><a class="dropdown-item" href="{{ url('user') }}">Dashboard</a></li>
                   <li><a class="dropdown-item" href="#">Pengaturan User</a></li>
                   <li><a class="dropdown-item" href="#">Ubah Info</a></li>
-                  <li><a class="dropdown-item" href="#">Keluar</a></li>
+                  <li><a class="dropdown-item" href="{{route('logouts')}}">Keluar</a></li>
                 </ul>
               </div>
         </div>

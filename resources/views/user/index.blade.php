@@ -48,7 +48,7 @@
                     <th>Layanan</th>
                     <th>Biaya</th>
                     <th>Status</th>
-                    <th>#</th>
+                    {{-- <th>#</th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -69,9 +69,9 @@
                     <td>{{ $layanan->name }}</td>
                     <td>{{ 'Rp '.number_format($tr->price,'0',',','.') }}</td>
                     <td><span class="badge bg-info">{{ ($tr->payment_type == 1 )?'Lunas':'Belum Dibayar' }}</span></td>
-                    <td>
+                    {{-- <td>
                         <a href="#" class="btn btn-sm btn-primary">modal</a>
-                        </td>
+                        </td> --}}
                 </tr>
                 @endforeach
             </tbody>

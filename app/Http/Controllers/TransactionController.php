@@ -117,5 +117,53 @@ class TransactionController extends Controller
         //
     }
 
+    public function print($id)
+    {
+        $data =  DB::table('transactions')
+        ->select('transactions.status','ext','order_number','name','weight','price','payment_type','pay_amount','transactions.created_at')
+        ->leftJoin('costumers','costumers.id','=','transactions.costumer_id')
+        ->where('transactions.order_number', $id)
+        ->get();
+
+        $data = array_map(function($x) {
+            $json = json_decode($x->ext);
+            $layanan = DB::table('service')->where('id', $json->service_id)->first();
+            $x->no_order = $layanan->code.'-'.$x->order_number;
+            $x->layanan = $layanan->name;
+            $x->pembayaran = ($x->payment_type == 1)?'Lunas':'Belum Lunas';
+            $x->total = $x->price;
+            $x->biaya_layanan = $x->price/$x->weight;
+            $x->tanggal_ambil = date('Y-m-d',strtotime($x->created_at) + (24*$layanan->duration*60*60));
+            $x->status = $this->status($x->status);
+            unset($x->ext);
+            unset($x->order_number);
+            unset($x->price);
+            return $x;
+        },$data->toArray());
+
+        return view('user.print',compact('data'));
+    }
+
+    function status($val)
+    {
+        switch ($val) {
+            case '1':
+                $status = 'Cuci';
+                break;
+            case '2':
+                $status = 'Setrika';
+                break;
+            case '3':
+                $status = 'Selesai';
+                break;
+            case '4':
+                $status = 'Diambil';
+                break;
+            default:
+                $status = 'Proses';
+                break;
+        }
+        return $status;
+    }
    
 }
