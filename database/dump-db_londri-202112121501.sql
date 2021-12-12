@@ -30,8 +30,9 @@ CREATE TABLE `costumers` (
   `status` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +41,7 @@ CREATE TABLE `costumers` (
 
 LOCK TABLES `costumers` WRITE;
 /*!40000 ALTER TABLE `costumers` DISABLE KEYS */;
-INSERT INTO `costumers` VALUES (5,'Indra','081290669170','Jakarta',1,NULL,NULL);
+INSERT INTO `costumers` VALUES (5,'Indra','081290669170','Jakarta',1,NULL,NULL,NULL),(6,'Rudi','081290669170','Jakarta Indonesia',1,NULL,NULL,NULL),(7,'Rudi','081290669170','Jakarta Indonesia',1,NULL,NULL,NULL),(8,'Rudi','081290669170','Jakarta Indonesia',1,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `costumers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -283,8 +284,9 @@ CREATE TABLE `stok` (
   `status` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `user_id` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -293,7 +295,7 @@ CREATE TABLE `stok` (
 
 LOCK TABLES `stok` WRITE;
 /*!40000 ALTER TABLE `stok` DISABLE KEYS */;
-INSERT INTO `stok` VALUES (1,'Pewangi',100,'3',1500,1,'2021-11-13 22:06:03','2021-11-13 22:06:03'),(2,'Detergen',10,'3',30000,1,'2021-12-04 23:42:06','2021-12-04 23:42:06');
+INSERT INTO `stok` VALUES (1,'Pewangi',100,'3',1500,1,'2021-11-13 22:06:03','2021-11-13 22:06:03',NULL),(2,'Detergen',10,'3',30000,1,'2021-12-04 23:42:06','2021-12-04 23:42:06',NULL),(3,'Pemutih',1000,'3',5000,1,'2021-12-11 22:21:06','2021-12-11 22:21:06',NULL),(4,'Pewangi',100,'3',1000,1,'2021-12-11 22:22:57','2021-12-11 22:22:57','1');
 /*!40000 ALTER TABLE `stok` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -348,9 +350,9 @@ CREATE TABLE `transactions` (
   `created_at` date DEFAULT NULL,
   `updated_at` date DEFAULT NULL,
   `payment_type` int(11) NOT NULL DEFAULT 0,
-  `charge` int(11) DEFAULT 0,
+  `pay_amount` int(11) DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -359,7 +361,7 @@ CREATE TABLE `transactions` (
 
 LOCK TABLES `transactions` WRITE;
 /*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
-INSERT INTO `transactions` VALUES (1,999999,0,5,10,NULL,70000,4,'{\"payment_tipe\":\"1\",\"service_id\":\"1\"}','2021-12-05',NULL,1,0),(2,463142,0,5,3,NULL,21000,2,'{\"payment_tipe\":\"2\",\"service_id\":\"2\"}','2021-12-10',NULL,0,0);
+INSERT INTO `transactions` VALUES (1,999999,0,5,10,NULL,70000,4,'{\"payment_tipe\":\"1\",\"service_id\":\"1\"}','2021-12-05',NULL,1,100000),(2,463142,0,5,3,NULL,21000,3,'{\"payment_tipe\":\"2\",\"service_id\":\"2\"}','2021-12-10',NULL,0,0),(3,248874,1,8,1,0,7000,0,'{\"payment_tipe\":\"1\",\"service_id\":\"1\"}','2021-12-12',NULL,1,10000);
 /*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -381,10 +383,13 @@ CREATE TABLE `users` (
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `phone` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` int(11) DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`),
   UNIQUE KEY `users_username_unique` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -393,6 +398,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'admin','admin@gmail.com','admin ',NULL,'$2y$10$dUPAfH8g5om7095HsTgyMeq69quGX8L1ZniDbfasFnD6QgTCR57AK','1',NULL,NULL,NULL,'081290669170','Jakarta Raya Indonesia',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -409,4 +415,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-09  0:44:07
+-- Dump completed on 2021-12-12 15:01:33

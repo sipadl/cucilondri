@@ -3,10 +3,12 @@
         <div class="logo d-flex">
             <img src="https://placeimg.com/30/30/arch" alt="" class="thubmnail" height="30" width="30" style="border-radius: 4px">
             <div class="d-flex p-1">
-                <a href="{{ url('user/suplier') }}" class="mx-2 nav-item">Suplier</a>
                 <a href="{{ url('user/service') }}" class="mx-2 nav-item">Service</a>
                 <a href="{{ url('user/stok') }}" class="mx-2 nav-item">Stok</a>
-                <a href="{{ url('user/mitra') }}" class="mx-2 nav-item">Cabang</a>
+                @if(Auth::user()->role = 1)
+                  <a href="{{ url('user/suplier') }}" class="mx-2 nav-item">Suplier</a>
+                  <a href="{{ url('user/mitra') }}" class="mx-2 nav-item">Cabang</a>
+                @endif
                 <a href="{{ url('user/transaction') }}" class="mx-2 nav-item">Transaksi</a>
                 <a href="{{ url('user/laporan') }}" class="mx-2 nav-item">Laporan</a>
             </div>
@@ -14,12 +16,18 @@
         <div class="text">
             <div class="dropdown">
                 <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                  User
+                  @php
+                   $user = Auth::user()->role;   
+                  @endphp
+                  @if($user = 1)
+                  Administrator
+                  @else
+                  Cabang
+                  @endif
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                   <li><a class="dropdown-item" href="{{ url('user') }}">Dashboard</a></li>
-                  <li><a class="dropdown-item" href="#">Pengaturan User</a></li>
-                  <li><a class="dropdown-item" href="#">Ubah Info</a></li>
+                  <li><a class="dropdown-item" href="{{ route('passwords') }}">Ubah Password</a></li>
                   <li><a class="dropdown-item" href="{{route('logouts')}}">Keluar</a></li>
                 </ul>
               </div>

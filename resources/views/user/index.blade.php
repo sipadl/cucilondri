@@ -33,8 +33,12 @@
             </div>
         </div>
         <div class="card mx-2 w-25">
+            <div class="text-center">
                 <h6 class="card-header mb-1">Stok</h6>
-                <p class="card-text">Text</p>
+                    <p class="card-text">
+                        <span class="text-dark">{{($stok->sum('stock') > 3)?'Stok Tersedia':'Stok Hampir Habis'}}</span>
+                    </p>
+                </div>
         </div>
     </div>
     <div class="card p-2 m-1 mt-2">

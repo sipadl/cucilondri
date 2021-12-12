@@ -40,7 +40,7 @@
                     <td> <span class="badge bg-light text-dark">{{ ($data->status == 1)?'Active':'Deactive' }}</span></td>
                     <td>
                         <span><a class="badge bg-warning text-dark" data-bs-toggle="modal" data-bs-target="#updateModal" onclick="get({{$data->id}})" href="javascript:;">Ubah</a></span>
-                        <span><a class="badge bg-secondary text-light" href="javascript:;">Matikan</a></span>
+                        <span><a class="badge bg-secondary text-light" href="{{ route('service.edit', $data->id) }}">{{ ($data->status == 1)?'Non Aktifkan':'Aktifkan' }}</a></span>
                     </td>
                 </tr>
                 @endforeach

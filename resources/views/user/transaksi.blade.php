@@ -22,6 +22,7 @@
             <div class="card-body">
                 <form action="{{ url('user/transaction') }}" id="new" method="post">
                     @csrf
+                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                     <div class="row">
                         <div class="col-md-9 col-xs-12">
                             <h5>Informasi Pelanggan</h5>
@@ -97,15 +98,21 @@
                                 </div>
                             </div>
                             <div class="form-group row p-2">
-                                <label for="" class="label-form-col col-md-6 col-12">
+                                <label for="" class="label-form-col col-md-12 col-12">
                                     Tipe Pembayaran
                                 </label>
-                                <div class="col-md-6 col-12">
-                                    <select name="payment_tipe" class="form-control" id="">
-                                        <option value="0">Pilih Salah Satu</option>
+                                <div class="col-md-12 col-12">
+                                    <select name="payment_tipe" class="form-control" id="paytip">
+                                        <option value="#">Pilih Salah Satu</option>
                                         <option value="1">Bayar Sekarang</option>
-                                        <option value="2">Bayar Nanti</option>
+                                        <option value="0">Bayar Nanti</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="form-group row p-2" id="pymnt" style="display:none">
+                                <label for="" class="label-form-col col-md-12 col-12">Jumlah Uang</label>
+                                <div class="col-xs-12">
+                                    <input type="text" name="pay_amount" class="form-control">
                                 </div>
                             </div>
                             <div class="payment text-center" style="display: none">
@@ -128,6 +135,8 @@
             <div class="card-body">
                 <form action="{{ url('user/transaction') }}" id="new" method="post">
                     @csrf
+                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+
                     <input type="hidden" name="is_member" value="1">
                     <div class="row">
                         <div class="col-md-9 col-xs-12">
@@ -191,15 +200,21 @@
                                 </div>
                             </div>
                             <div class="form-group row p-2">
-                                <label for="" class="label-form-col col-md-6 col-12">
+                                <label for="" class="label-form-col col-md-12 col-12">
                                     Tipe Pembayaran
                                 </label>
-                                <div class="col-md-6 col-12">
-                                    <select name="payment_tipe" class="form-control" id="">
-                                        <option value="0">Pilih Salah Satu</option>
+                                <div class="col-md-12 col-12">
+                                    <select name="payment_tipe" class="form-control" id="paytip1">
+                                        <option value="#">Pilih Salah Satu</option>
                                         <option value="1">Bayar Sekarang</option>
-                                        <option value="2">Bayar Nanti</option>
+                                        <option value="0">Bayar Nanti</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="form-group row p-2" id="pymnt1" style="display:none">
+                                <label for="" class="label-form-col col-md-12 col-12">Jumlah Uang</label>
+                                <div class="col-xs-12">
+                                    <input type="text" name="pay_amount" class="form-control">
                                 </div>
                             </div>
                             <div class="payment text-center" style="display: none">
@@ -287,6 +302,16 @@
     $('.weight1').on('input', function(){
         $('#servicess1').fadeIn()
     })
+
+    $('#paytip').on('click', function(){
+        if($('#paytip').val() == '1'){
+            $('#pymnt').fadeIn();
+        }
+    })
+
+    if($('#paytip1').val() == '1'){
+        $('#pymnt1').fadeIn();
+    }
     function run()
     {
         var e = $('.services');

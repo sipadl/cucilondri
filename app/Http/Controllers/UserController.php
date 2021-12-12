@@ -5,6 +5,7 @@ use DB;
 use Illuminate\Http\Request;
 use Validator;
 use Auth;
+use Hash;
 
 class UserController extends Controller
 {
@@ -20,29 +21,58 @@ class UserController extends Controller
      */
     public function index()
     {
-        $service = DB::table('service')->where('status', 1)->get();
-        $customer = DB::table('costumers')->where('status', 1 )->get();
-        $transaction = DB::table('transactions')
-        ->leftJoin('costumers','costumers.id','transactions.costumer_id')
-        ->paginate(10);
-
-
-        $profit = DB::table('transactions')
-        ->leftJoin('costumers','costumers.id','transactions.costumer_id')
-        ->whereMonth('transactions.created_at', date('m'))
-        ->where('payment_type', 1)->sum('price');
-
-        $piutang = DB::table('transactions')
-        ->leftJoin('costumers','costumers.id','transactions.costumer_id')
-        ->whereMonth('transactions.created_at', date('m'))
-        ->where('payment_type', 0)->sum('price');        
-        
-        $proses = $this->count_transaction([0,1,2,3]);
-        $berhasil = $this->count_transaction([4]);
-        $gagal = $this->count_transaction([5]);
+        $user = Auth::user();
+        if($user->role = 0){
+            $service = DB::table('service')->where('status', 1)->get();
+            $customer = DB::table('costumers')->where('status', 1 )->get();
+            $transaction = DB::table('transactions')
+            ->leftJoin('costumers','costumers.id','transactions.costumer_id')
+            ->paginate(10);
+            
+            
+            $profit = DB::table('transactions')
+            ->leftJoin('costumers','costumers.id','transactions.costumer_id')
+            ->whereMonth('transactions.created_at', date('m'))
+            ->where('payment_type', 1)->sum('price');
+            
+            $piutang = DB::table('transactions')
+            ->leftJoin('costumers','costumers.id','transactions.costumer_id')
+            ->whereMonth('transactions.created_at', date('m'))
+            ->where('payment_type', 0)->sum('price');        
+            
+            $proses = $this->count_transaction([0,1,2,3]);
+            $berhasil = $this->count_transaction([4]);
+            $gagal = $this->count_transaction([5]);
+            $stok = DB::table('stok')->where('user_id', $user->id)->get();
+        }else{
+            $service = DB::table('service')->where('status', 1)->get();
+            $customer = DB::table('costumers')->where('user_id',$user->id)->where('status', 1 )->get();
+            $transaction = DB::table('transactions')
+            ->leftJoin('costumers','costumers.id','transactions.costumer_id')
+            ->where('transactions.id_user',$user->id)
+            ->paginate(10);
+            
+            
+            $profit = DB::table('transactions')
+            ->leftJoin('costumers','costumers.id','transactions.costumer_id')
+            ->whereMonth('transactions.created_at', date('m'))
+            ->where('transactions.id_user',$user->id)
+            ->where('payment_type', 1)->sum('price');
+            
+            $piutang = DB::table('transactions')
+            ->leftJoin('costumers','costumers.id','transactions.costumer_id')
+            ->whereMonth('transactions.created_at', date('m'))
+            ->where('transactions.id_user',$user->id)
+            ->where('payment_type', 0)->sum('price');        
+            
+            $proses = $this->count_transaction([0,1,2,3], $user);
+            $berhasil = $this->count_transaction([4], $user);
+            $gagal = $this->count_transaction([5], $user);
+            $stok = DB::table('stok')->where('user_id', $user->id)->get();
+        }
 
         return view('user.index',compact('service','customer','transaction',
-        'profit','piutang','proses','berhasil','gagal'));
+        'profit','piutang','proses','berhasil','gagal','stok'));
     }
 
     /**
@@ -74,7 +104,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = DB::table('users')->where('id', $id)->first();
+        return response()->json($user);
     }
 
     /**
@@ -108,15 +139,29 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $delete = DB::table('users')->where('id', $id)->delete();
+        return redirect()->back()->with('msg','Berhasil Menghapus Cabang');
+    }
+    
+    public function deaktif($id)
+    {
+        $delete = DB::table('users')->where('id', $id)->update([
+            'status' => 0
+        ]);
+        return redirect()->back()->with('msg','Berhasil Menonaktifkan Cabang');
+
     }
 
-    function count_transaction($status)
+    function count_transaction($status, $user = null)
     {
         $trans = DB::table('transactions')
         ->whereMonth('created_at',date('m'))
-        ->whereIn('status', $status)
-        ->count();
+        ->whereIn('status', $status);
+        if($user)
+        {
+            $trans->where('id_user', $user->id);
+        }
+        $trans = $trans->count();
 
         return $trans;
     }
@@ -183,6 +228,33 @@ class UserController extends Controller
     {
         Auth::logout();
         return redirect()->route('auth.login');
+    }
+
+    public function password()
+    {
+        return view('user.password');
+    }
+
+    public function ubahPassword(Request $request)
+    {  
+        $user = Auth::user();
+        $rules = [
+            'password_old' => 'required',
+            'password_new' => 'required',
+            'password_confirmation' => 'same:password_new'
+        ];
+        $validator = Validator::make($request->except('_token'), $rules);
+        if($validator->passes())
+        {
+            $cek = Hash::check($request->password_old, $user->password);
+            if($cek)
+            {
+                DB::table('users')->where('id', $user->id)->update(
+                    ['password' => Hash::make($request->password_new)]
+                );
+            }
+        }
+        return redirect()->back()->with('msg', $validator->errors()->first()??(!$cek)?'Cek kembali password lama anda':'Berhasl');
     }
     
 }

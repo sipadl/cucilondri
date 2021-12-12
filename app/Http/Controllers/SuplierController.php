@@ -46,13 +46,14 @@ class SuplierController extends Controller
 
         $validaor = Validator::make($request->all(), $rules);
         if($validator->passes()){
-
-            $file = $request->file('photos');
-            $name = time().'-'.rand(1,1000).'.'.$file->getClientOriginalExtension();
-            $file->move(public_path('assets/suplier'),$name);
+            if($request->file){
+                $file = $request->file('photos');
+                $name = time().'-'.rand(1,1000).'.'.$file->getClientOriginalExtension();
+                $file->move(public_path('assets/suplier'),$name);
+            }
             $insert = [
                 'name' => $request->name,
-                'photos' => '/assets/suplier/'.$name,
+                'photos' => ($request->file)?'/assets/suplier/'.$name:0,
                 'phone' => $request->phone,
                 'address' => $request->address,
                 'ext'   => null,
@@ -85,7 +86,14 @@ class SuplierController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = DB::table('suplier')->where('id', $id)->first();
+        if($data->status  == 1)
+        {
+            DB::table('suplier')->update(['status' => 0 ]);
+        }else{
+            DB::table('suplier')->update(['status' => 1 ]);
+        }
+        return redirect()->back()->with('msg','Berhasil mengubah data');
     }
 
     /**

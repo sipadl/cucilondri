@@ -77,7 +77,14 @@ class ServiceController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = DB::table('service')->where('id', $id)->first();
+        if($data->status  == 1)
+        {
+            DB::table('service')->update(['status' => 0 ]);
+        }else{
+            DB::table('service')->update(['status' => 1 ]);
+        }
+        return redirect()->back()->with('msg','Berhasil mengubah data');
     }
 
     /**

@@ -18,11 +18,13 @@ class TransactionController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
         $service = DB::table('service')->where('status', 1)->get();
-        $customer = DB::table('costumers')->where('status', 1 )->get();
+        $customer = DB::table('costumers')->where('user_id',$user->id)->where('status', 1 )->get();
         $transaction = DB::table('transactions')
         ->select('transactions.status','ext','order_number','name','weight','price','payment_type')
         ->leftJoin('costumers','costumers.id','transactions.costumer_id')
+        ->where('transactions.id_user', $user->id)
         ->paginate(10);
         return view('user.transaksi', compact('service','customer','transaction'));
     }
@@ -63,11 +65,12 @@ class TransactionController extends Controller
             'id_user' => $user->id??0,
             'costumer_id' => $id??$request->member_id,
             'weight' => $request->weight,
-            'note' => $request->note??null,
+            'note' => $request->note??0,
             'price' => $request->price,
-            'status' => 0,
+            'status' => $request->payment_tipe,
+            'pay_amount' => $request->pay_amount,
             'ext' => json_encode($data),
-            'created_at' => time()
+            'created_at' => date('Y-m-d', time()),
         ]);
         return redirect()->back()->with('msg','Berhasil Memproses Pesanan');
     }

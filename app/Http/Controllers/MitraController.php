@@ -30,4 +30,10 @@ class MitraController extends Controller
         $data = DB::table('users')->insert($input);
         return redirect()->back()->with('msg','Berhasil mengubah data');
     }
+
+    public function update(Request $request)
+    {
+        $data = DB::table('users')->where('id', $request->id)->update($request->except(['_token','id']));
+        return redirect()->back()->with('msg','Berhasil mengubah data');
+    }
 }

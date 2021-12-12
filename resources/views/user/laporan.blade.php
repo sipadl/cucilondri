@@ -8,7 +8,7 @@
             <h6>Laporan</h6>
         </div> 
             <div class="">
-                <span class="badge bg-primary"><a class="text-light" href="javascript:;" onclick="mitra()">Kemitraan</a></span>
+                {{-- <span class="badge bg-primary"><a class="text-light" href="javascript:;" onclick="mitra()">Kemitraan</a></span> --}}
                 <span class="badge bg-primary"><a class="text-light" href="javascript:;" onclick="print()">print</a></span>
             </div>
         </div>

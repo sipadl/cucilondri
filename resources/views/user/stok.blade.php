@@ -41,7 +41,7 @@
                             <td>{{ $date->updated_at??$data->created_at }}</td>
                             <td>
                                 <span><a class="badge bg-warning text-dark" data-bs-toggle="modal" data-bs-target="#updateModal" onclick="get({{$data->id}})" href="javascript:;">Ubah</a></span>
-                                <span><a class="badge bg-secondary text-light" href="javascript:;">Matikan</a></span>
+                                <span><a class="badge bg-secondary text-light" href="{{ route('stok.edit', $data->id) }}">{{ ($data->status == 1)?'Non Aktifkan':'Aktifkan' }}</a></span>
                             </td>
                         </tr>
                         @endforeach
@@ -81,6 +81,7 @@
                     </div>
                 </div>
                 <input type="hidden" name="status" value="1">
+                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                 <div class="form-input row mb-2">
                     <label for="" class="label-form-col col-md-4">Suplier Produk</label>
                     <div class="col-md-8">
