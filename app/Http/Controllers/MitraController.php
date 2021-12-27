@@ -10,9 +10,18 @@ class MitraController extends Controller
 {
     public function index()
     {
-        $user = DB::table('users')
-        ->leftJoin('transactions', 'transactions.id_user', 'users.id')->paginate(20);
-        return view('user.mitra', compact('user'));
+        $user = DB::table('users')->paginate(25);
+        $users = array_map(function($x){
+            $y['id'] = $x->id;
+            $y['name'] = $x->name??'Pelanggan Setia';
+            $y['phone'] = $x->phone??'kosong';
+            $y['role'] = ($x->role == 1 )?'Administrator':'Cabang';
+            $y['status'] = ($x->status == 1)?'Aktif':'Non Aktif';
+            $y['piutang'] = DB::table('transactions')->where('id_user', $x->id)->where('payment_type', 0)->sum('price');
+            $y['keuntungan'] = DB::table('transactions')->where('id_user', $x->id)->where('payment_type', 1)->sum('price');
+            return $y;
+        },$user->toArray()['data']);
+        return view('user.mitra', compact('users','user'));
     }
 
     public function store(Request $request)

@@ -18,7 +18,7 @@ class StokController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $stok = Stok::with('suplier')->where('user_id',$user->id)->where('status',1)->get();
+        $stok = Stok::with('suplier')->where('user_id',$user->id)->get();
         $suplier = DB::table('suplier')->where('status',1)->get();
         return view('user.stok', compact('stok','suplier'));
     }
@@ -80,9 +80,9 @@ class StokController extends Controller
         $data = DB::table('stok')->where('id', $id)->first();
         if($data->status  == 1)
         {
-            DB::table('stok')->update(['status' => 0 ]);
+            DB::table('stok')->where('id', $id)->update(['status' => 0 ]);
         }else{
-            DB::table('stok')->update(['status' => 1 ]);
+            DB::table('stok')->where('id', $id)->update(['status' => 1 ]);
         }
         return redirect()->back()->with('msg','Berhasil mengubah data');
     }

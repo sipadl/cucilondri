@@ -15,7 +15,7 @@ class SuplierController extends Controller
      */
     public function index()
     {
-        $data = DB::table('suplier')->where('status', 1 )->get();
+        $data = DB::table('suplier')->get();
         return view('user.suplier',compact('data'));
     }
 
@@ -44,7 +44,7 @@ class SuplierController extends Controller
             'address' => 'required'
         ];
 
-        $validaor = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
         if($validator->passes()){
             if($request->file){
                 $file = $request->file('photos');
@@ -58,7 +58,7 @@ class SuplierController extends Controller
                 'address' => $request->address,
                 'ext'   => null,
                 'status' => 1,
-                'created_at' => time()
+                'created_at' => date('Y-m-d h:i:s',time())
             ];
             $data = DB::table('suplier');
             $data = $data->insert($insert);
@@ -89,9 +89,9 @@ class SuplierController extends Controller
         $data = DB::table('suplier')->where('id', $id)->first();
         if($data->status  == 1)
         {
-            DB::table('suplier')->update(['status' => 0 ]);
+            DB::table('suplier')->where('id', $id)->update(['status' => 0 ]);
         }else{
-            DB::table('suplier')->update(['status' => 1 ]);
+            DB::table('suplier')->where('id', $id)->update(['status' => 1 ]);
         }
         return redirect()->back()->with('msg','Berhasil mengubah data');
     }

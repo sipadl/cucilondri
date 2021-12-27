@@ -177,17 +177,23 @@ class UserController extends Controller
 
     public function dataLaporan(Request $request)
     {
+        $user = Auth::user();
         $data =  DB::table('transactions')
-        ->select('transactions.status','ext','order_number','name','weight','price','payment_type','transactions.created_at')
+        ->select('users.name as cabang','transactions.status','ext','order_number','costumers.name','weight','price','payment_type','transactions.created_at')
         ->leftJoin('costumers','costumers.id','=','transactions.costumer_id')
+        ->leftJoin('users','users.id', 'transactions.id_user')
         ->whereDate('transactions.created_at','>=', $request->x)
-        ->whereDate('transactions.created_at','<=', $request->y)
-        ->get();
-        $i = 1;
-        $data = array_map(function($x) use ($i) {
+        ->whereDate('transactions.created_at','<=', $request->y);
+        if($user->role == 0 ){
+            $data->where('id_user', $user->id);
+        }
+        $data = $data->get();
+        $data = array_map(function($x) use ($user) {
             $json = json_decode($x->ext);
             $layanan = DB::table('service')->where('id', $json->service_id)->first();
-            $x->no = $i++;
+            if($user->role == 1){
+                $x->cabang = $x->cabang;
+            }
             $x->no_order = $layanan->code.'-'.$x->order_number;
             $x->layanan = $layanan->name;
             $x->pembayaran = ($x->payment_type == 1)?'Lunas':'Belum Lunas';

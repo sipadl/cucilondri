@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use DB;
 use Validator;
 use Auth;
+use Carbon\Carbon;
 use Str;
 
 class TransactionController extends Controller
@@ -22,7 +23,7 @@ class TransactionController extends Controller
         $service = DB::table('service')->where('status', 1)->get();
         $customer = DB::table('costumers')->where('user_id',$user->id)->where('status', 1 )->get();
         $transaction = DB::table('transactions')
-        ->select('transactions.status','ext','order_number','name','weight','price','payment_type')
+        ->select('transactions.status','ext','order_number','name','weight','price','payment_type','transactions.created_at','transactions.updated_at')
         ->leftJoin('costumers','costumers.id','transactions.costumer_id')
         ->where('transactions.id_user', $user->id)
         ->paginate(10);
@@ -53,13 +54,15 @@ class TransactionController extends Controller
                 'name' => Str::ucfirst(strtolower($request->name)),
                 'phone' => $request->phone,
                 'address' => $request->address,
-                'status' => 1
+                'status' => 1,
+                'user_id' => $user->id
             ]);
         }
         $data = [
             'payment_tipe' => $request->payment_tipe,
             'service_id' => $request->service_id,
         ];
+        Carbon::setLocale('id');
         $trade = DB::table('transactions')->insert([
             'order_number' => rand(100000,999999),
             'id_user' => $user->id??0,
@@ -69,8 +72,9 @@ class TransactionController extends Controller
             'price' => $request->price,
             'status' => $request->payment_tipe,
             'pay_amount' => $request->pay_amount,
+            'payment_type' => $request->payment_tipe,
             'ext' => json_encode($data),
-            'created_at' => date('Y-m-d', time()),
+            'created_at' => date('Y-m-d H:i:s', time()),
         ]);
         return redirect()->back()->with('msg','Berhasil Memproses Pesanan');
     }
@@ -123,7 +127,7 @@ class TransactionController extends Controller
     public function print($id)
     {
         $data =  DB::table('transactions')
-        ->select('transactions.status','ext','order_number','name','weight','price','payment_type','pay_amount','transactions.created_at')
+        ->select('transactions.status','ext','order_number','name','weight','price','payment_type','pay_amount','transactions.created_at','transactions.updated_at')
         ->leftJoin('costumers','costumers.id','=','transactions.costumer_id')
         ->where('transactions.order_number', $id)
         ->get();
@@ -167,6 +171,17 @@ class TransactionController extends Controller
                 break;
         }
         return $status;
+    }
+
+    public function bayar(Request $request)
+    {
+        DB::table('transactions')->where('order_number', $request->order_number)->update([
+            'payment_type' => 1,
+            'pay_amount' => $request->total,
+            'updated_at' => date('Y-m-d h:i:s', time()),
+        ]);
+
+        return redirect()->back()->with('msg','Berhasil Melakukan Pembayaran');
     }
    
 }

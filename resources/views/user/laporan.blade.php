@@ -37,6 +37,12 @@
                     <thead>
                         <tr class="text-center">
                             <th>Tanggal</th>
+                            @php
+                                $user = Auth::user();
+                            @endphp
+                            @if($user->role == 1)
+                                <th>Cabang</th>
+                            @endif
                             <th>No. Order</th>
                             <th>Pelanggan</th>
                             <th>Berat</th>
@@ -77,6 +83,7 @@ function print()
     })
     function Cari()
     {
+        $('#datass').html('')
         $.get("{{route('getLaporn')}}", {x:start.val(), y:end.val()},
             function (data) {
             data.forEach(isi => {
@@ -84,6 +91,9 @@ function print()
                 $('#datass').append(
                     `<tr class="text-center">
                         <td>${isi.created_at}</td>
+                        @if($user->role == 1)
+                        <td>${isi.cabang}</td>
+                        @endif
                         <td>${isi.no_order}</td>
                         <td>${isi.name}</td>
                         <td>${isi.weight} Kg</td>

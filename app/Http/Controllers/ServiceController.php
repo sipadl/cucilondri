@@ -15,7 +15,7 @@ class ServiceController extends Controller
      */
     public function index()
     {   
-        $service = DB::table('service')->where('status',1)->get();
+        $service = DB::table('service')->get();
         return view('user.service', compact('service'));
     }
 
@@ -80,9 +80,9 @@ class ServiceController extends Controller
         $data = DB::table('service')->where('id', $id)->first();
         if($data->status  == 1)
         {
-            DB::table('service')->update(['status' => 0 ]);
+            DB::table('service')->where('id', $id)->update(['status' => 0 ]);
         }else{
-            DB::table('service')->update(['status' => 1 ]);
+            DB::table('service')->where('id', $id)->update(['status' => 1 ]);
         }
         return redirect()->back()->with('msg','Berhasil mengubah data');
     }
@@ -116,7 +116,8 @@ class ServiceController extends Controller
         $trade = DB::table('transactions')->where('order_number',$id);
         $data = $trade->first();
         $update = $trade->update([
-            'status' => $data->status+1 ,
+            'status' => $data->status+1,
+            'updated_at' => date('Y-m-d h:i:s', time()),
         ]);
         return redirect()->back()->with('msg','Berhasil Memproses Orderan');
     }

@@ -61,6 +61,7 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('transaction')->group(function () {
             Route::resource('', App\Http\Controllers\TransactionController::class);
             Route::get('print/{id}',[App\Http\Controllers\TransactionController::class, 'print'])->name('print');
+            Route::post('bayar',[App\Http\Controllers\TransactionController::class, 'bayar'])->name('bayar');
         });
         Route::get('laporan', [App\Http\Controllers\UserController::class, 'laporan']);
         Route::get('getData', [App\Http\Controllers\UserController::class, 'dataLaporan'])->name('getLaporn');

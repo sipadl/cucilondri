@@ -31,24 +31,25 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($user as $item)
+                @foreach ($users as $key => $item)
+
                 <tr class="text-center">
                     <td>{{$i++}}</td>
-                    <td>{{$item->name}}</td>
-                    <td>{{$item->phone}}</td>
-                    <td>Rp {{isset($item->payment_type)?($item->payment_type == 1)?number_format($item->price,0):0:0}}</td>
-                    <td>Rp {{isset($item->payment_type)?($item->payment_type == 0)?number_format($item->price,0):0:0}}</td>
-                    <td>{{($item->status == 1)?"Aktif":"Tidak Aktif"}}</td>
-                    <td>{{($item->role == 0 )?'Cabang':'Administrator'}}</td>
+                    <td>{{$item['name'] }}</td>
+                    <td>{{$item['phone'] }}</td>
+                    <td>Rp {{number_format($item['keuntungan'] ,1) }}</td>
+                    <td>Rp {{number_format($item['piutang'] ,1) }}</td>
+                    <td>{{($item['status']  == 1)?"Aktif":"Tidak Aktif"}}</td>
+                    <td>{{($item['role']  == 0 )?'Cabang':'Administrator'}}</td>
                     <td>
                         <span class="badge bg-info">
-                            <a href="javascript:;" onclick="get({{$item->id_user}})" data-bs-toggle="modal" href="javascript:;" data-bs-target="#EditModal" class="text-light">Ubah</a>
+                            <a href="javascript:;" onclick="get({{$item['id']}})" data-bs-toggle="modal" href="javascript:;" data-bs-target="#EditModal" class="text-light">Ubah</a>
                         </span>
                         {{-- <span class="badge bg-secondary">
                             <a href="{{ route('deaktifs',[$item->id_user]) }}" class="text-light">Deaktif</a>
                         </span> --}}
                         <span class="badge bg-danger">
-                            <a href="{{ route('destroys',[$item->id_user]) }}" class="text-light">Hapus</a>
+                            <a href="{{ route('destroys',[ $item['id'] ]) }}" class="text-light">Hapus</a>
                         </span>
                     </td>
                 </tr>
@@ -73,25 +74,25 @@
                 <div class="form-group row mb-2">
                     <label for="" class="label-form-col col-4 p-1">Nama Pemilik</label>
                     <div class="col-8">
-                        <input name="name" class="form-control">
+                        <input required name="name" class="form-control">
                     </div>
                 </div>
                 <div class="form-group row mb-2">
                     <label for="" class="label-form-col col-4 p-1">Email</label>
                     <div class="col-8">
-                        <input type="email" name="email" class="form-control">
+                        <input required type="email" name="email" class="form-control">
                     </div>
                 </div>
                 <div class="form-group row mb-2">
                     <label for="" class="label-form-col col-4 p-1">Username</label>
                     <div class="col-8">
-                        <input type="text" name="username" class="form-control">
+                        <input required type="text" name="username" class="form-control">
                     </div>
                 </div>
                 <div class="form-group row mb-2">
                     <label for="" class="label-form-col col-4 p-1">No. Telpon</label>
                     <div class="col-8">
-                        <input  name="phone" class="form-control">
+                        <input required  name="phone" class="form-control">
                     </div>
                 </div>
                 <div class="form-group row mb-2">
@@ -121,30 +122,30 @@
         </div>
         <form action="{{ route('update.mitra') }}" method="post">
             @csrf
-            <input type="hidden" name="id" id="id">
+            <input required type="hidden" name="id" id="id">
             <div class="modal-body">
                 <div class="form-group row mb-2">
                     <label for="" class="label-form-col col-4 p-1">Nama Pemilik</label>
                     <div class="col-8">
-                        <input name="name" id="name" class="form-control">
+                        <input required name="name" id="name" class="form-control">
                     </div>
                 </div>
                 <div class="form-group row mb-2">
                     <label for="" class="label-form-col col-4 p-1">Email</label>
                     <div class="col-8">
-                        <input type="email" id="email" name="email" class="form-control">
+                        <input required type="email" id="email" name="email" class="form-control">
                     </div>
                 </div>
                 <div class="form-group row mb-2">
                     <label for="" class="label-form-col col-4 p-1">Username</label>
                     <div class="col-8">
-                        <input type="text" id="username" name="username" class="form-control">
+                        <input required type="text" id="username" name="username" class="form-control">
                     </div>
                 </div>
                 <div class="form-group row mb-2">
                     <label for="" class="label-form-col col-4 p-1">No. Telpon</label>
                     <div class="col-8">
-                        <input  name="phone" id="phone" class="form-control">
+                        <input required  name="phone" id="phone" class="form-control">
                     </div>
                 </div>
                 <div class="form-group row mb-2">
