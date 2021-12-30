@@ -41,7 +41,7 @@
                                 $user = Auth::user();
                             @endphp
                             @if($user->role == 1)
-                                <th>Cabang</th>
+                                <th>Karyawan</th>
                             @endif
                             <th>No. Order</th>
                             <th>Pelanggan</th>

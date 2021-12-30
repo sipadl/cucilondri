@@ -10,7 +10,7 @@
                 <a href="{{ url('user/stok') }}" class="mx-2 nav-item">Stok</a>
                 @if(Auth::user()->role == 1)
                   <a href="{{ url('user/suplier') }}" class="mx-2 nav-item">Suplier</a>
-                  <a href="{{ url('user/mitra') }}" class="mx-2 nav-item">Cabang</a>
+                  <a href="{{ url('user/mitra') }}" class="mx-2 nav-item">Karyawan</a>
                 @endif
                 <a href="{{ url('user/transaction') }}" class="mx-2 nav-item">Transaksi</a>
                 <a href="{{ url('user/laporan') }}" class="mx-2 nav-item">Laporan</a>
@@ -22,7 +22,7 @@
                   @if(Auth::user()->role == 1)
                   Administrator
                   @else
-                  Cabang
+                  Karyawan
                   @endif
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">

@@ -214,7 +214,7 @@
                             <div class="form-group row p-2" id="pymnt1" style="display:none">
                                 <label for="" class="label-form-col col-md-12 col-12">Jumlah Uang</label>
                                 <div class="col-xs-12">
-                                    <input type="text" name="pay_amount" required id="pay1" class="form-control">
+                                    <input type="text" name="pay_amount" id="pay1" class="form-control">
                                 </div>
                             </div>
                             <div class="payment text-center" style="display: none">
@@ -285,7 +285,9 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $transaction->links() }}
+                <div class="text-center">
+                    {{ $transaction->links() }}
+                </div>
             </div>
         </div>
     </div>
@@ -391,7 +393,10 @@
                 $('#biaya1').html(data.price +'/Kg')
                 $('.price1').val(data.price * w)
                 $('#total1').html(formatRupiah(data.price * w))
-                $('#pay1').attr('min', data.price);
+                if($('#paytip1').val() == 1)
+                {
+                    $('#pay1').attr('min', data.price);
+                }
                 }
               }
             },

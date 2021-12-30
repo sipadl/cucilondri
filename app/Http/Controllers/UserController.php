@@ -22,7 +22,7 @@ class UserController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if($user->role = 0){
+        if($user->role == 0){
             $service = DB::table('service')->where('status', 1)->get();
             $customer = DB::table('costumers')->where('status', 1 )->get();
             $transaction = DB::table('transactions')

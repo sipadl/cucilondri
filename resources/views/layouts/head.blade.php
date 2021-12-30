@@ -20,6 +20,15 @@
       .nav-primary{
         background: #4e7db6;
       }
+      svg{
+        display:none;
+      }
+      /* .relative{
+        display:none;
+      } */
+      p {
+        padding:10px;
+      }
     </style>
     <div class="container">
     @include('layouts.navbar')
