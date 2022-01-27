@@ -36,7 +36,7 @@
                         <div class="form-group row mb-2">
                             <label for="" class="label-form-col col-md-2">No. Telpon Pelanggan</label>
                             <div class="col-md-10">
-                                <input required type="text" name="phone" id="" class="form-control">
+                                <input required type="number" name="phone" id="" class="form-control">
                             </div>
                         </div>
                         <div class="form-group row mb-2">
@@ -50,7 +50,7 @@
                         <div class="form-group row mb-2">
                             <label for="" class="label-form-col col-md-2">Berat Laundry</label>
                             <div class="col-md-5">
-                                <input required type="text" name="weight" class="form-control weight">
+                                <input required type="number" name="weight" min=1 value=1 class="form-control weight">
                             </div>
                         </div>
                         <div class="form-group row mb-2" id="servicess" style="display:none">
@@ -319,9 +319,9 @@
       </div>
     </div>
   </div>
-  @endsection 
+  @endsection
   @section('js')
-  <script> 
+  <script>
   const formatRupiah = (money) => {
         return new Intl.NumberFormat('id-ID',
             { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }
@@ -342,7 +342,7 @@
 
         }
     })
- 
+
     $('#paytip1').on('click', function(){
         if($('#paytip1').val() == '1'){
             $('#pymnt1').fadeIn();
